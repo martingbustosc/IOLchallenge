@@ -18,6 +18,19 @@ namespace CodingChallenge.Data.Classes
     {
         #region Formas
 
+        /*
+         Aquí surge un dilema, como ya existían tres formas que funcionan con el constructor y métodos existentes.
+         Hay dos posibilidades: 
+         1- Crear una clase "FormaGenerica", y luego implementar polimorfismo. Una clase por cada "figura en particular" que hereden las propiedades de la clase padre "FormaGenerica".
+            Métodos a heredar y sobreescribir por ej: CalcularArea y CalcularPerimetro, ya que esos calculos varian para cada figura.
+         2- La solución implementada. Se agregaron dos campos (_base y _altura), medidas necesarias para los calculos en la figura nueva "Trapecio Rectangulo". Para 
+            las tres figuras existentes (_lado sigue existiendo, y los campos nuevos por default van en 0 ya que no necesitan esas medidas). Se modificó el constructor para
+            que acepte los casos posibles para este ejercicio.
+
+         Respecto al idioma: decidí agregar tres idiomas extras, Portugues, Frances e Italiano. Implementar switch en lugar de multiples if ya que las posibilidades son mayores,
+         y es más óptimo que ir comparando por cada uno. Para cada case del switch de idoma, su traducción, dejando por default a Inglés.
+         */
+
         public const int Cuadrado = 1;
         public const int TrianguloEquilatero = 2;
         public const int Circulo = 3;
@@ -100,6 +113,7 @@ namespace CodingChallenge.Data.Classes
                 //    // default es inglés
                 //    sb.Append("<h1>Shapes report</h1>");
 
+                // HEADER
                 //SOLUCION IDIOMA
                 switch (idioma)
                 {
@@ -161,7 +175,8 @@ namespace CodingChallenge.Data.Classes
                 //    }
                 //}
 
-                //SOLUCÓN: de esta manera se realizan menos comparaciones y operaciones. La complejidad algoritmica disminuye, resultando en una ejecución mas óptima.
+                //SOLUCÓN: de esta manera se realizan menos comparaciones (multiples if, más las de cada iteracion del for) y operaciones (declaración e incremento de la variable i).
+                //La complejidad algorítmica disminuye, resultando en una ejecución mas óptima.
                 foreach (var forma in formas)
                 {
                     switch (forma.Tipo)
@@ -191,17 +206,51 @@ namespace CodingChallenge.Data.Classes
                             break;
                     }
                 }
-                
+
                 sb.Append(ObtenerLinea(numeroCuadrados, areaCuadrados, perimetroCuadrados, Cuadrado, idioma));
                 sb.Append(ObtenerLinea(numeroCirculos, areaCirculos, perimetroCirculos, Circulo, idioma));
                 sb.Append(ObtenerLinea(numeroTriangulos, areaTriangulos, perimetroTriangulos, TrianguloEquilatero, idioma));
                 sb.Append(ObtenerLinea(numeroTrapecios, areaTraprecios, perimetroTraprecios, Trapecio, idioma));
 
                 // FOOTER
-                sb.Append("TOTAL:<br/>");
-                sb.Append(numeroCuadrados + numeroCirculos + numeroTriangulos + " " + (idioma == Castellano ? "formas" : "shapes") + " ");
-                sb.Append((idioma == Castellano ? "Perimetro " : "Perimeter ") + (perimetroCuadrados + perimetroTriangulos + perimetroCirculos).ToString("#.##") + " ");
-                sb.Append("Area " + (areaCuadrados + areaCirculos + areaTriangulos).ToString("#.##"));
+                switch (idioma)
+                {
+                    case Castellano:
+                        sb.Append("TOTAL:<br/>");
+                        sb.Append(numeroCuadrados + numeroCirculos + numeroTriangulos + " " + "formas" + " ");
+                        sb.Append("Perimetro " + (perimetroCuadrados + perimetroTriangulos + perimetroCirculos).ToString("#.##") + " ");
+                        sb.Append("Area " + (areaCuadrados + areaCirculos + areaTriangulos).ToString("#.##"));
+                        break;
+
+                    case Portugues:
+                        sb.Append("TOTAL:<br/>");
+                        sb.Append(numeroCuadrados + numeroCirculos + numeroTriangulos + " " + "formas" + " ");
+                        sb.Append("Perímetro " + (perimetroCuadrados + perimetroTriangulos + perimetroCirculos).ToString("#.##") + " ");
+                        sb.Append("Area " + (areaCuadrados + areaCirculos + areaTriangulos).ToString("#.##"));
+                        break;
+
+                    case Frances:
+                        sb.Append("LE TOTAL:<br/>");
+                        sb.Append(numeroCuadrados + numeroCirculos + numeroTriangulos + " " + "formes" + " ");
+                        sb.Append("Périmètre " + (perimetroCuadrados + perimetroTriangulos + perimetroCirculos).ToString("#.##") + " ");
+                        sb.Append("Aire " + (areaCuadrados + areaCirculos + areaTriangulos).ToString("#.##"));
+                        break;
+
+                    case Italiano:
+                        sb.Append("TOTALE:<br/>");
+                        sb.Append(numeroCuadrados + numeroCirculos + numeroTriangulos + " " + "forme" + " ");
+                        sb.Append("Perimetro " + (perimetroCuadrados + perimetroTriangulos + perimetroCirculos).ToString("#.##") + " ");
+                        sb.Append("Area " + (areaCuadrados + areaCirculos + areaTriangulos).ToString("#.##"));
+                        break;
+
+                    default://INGLES DEFAULT
+                        sb.Append("TOTAL:<br/>");
+                        sb.Append(numeroCuadrados + numeroCirculos + numeroTriangulos + " " + "shapes" + " ");
+                        sb.Append("Perimeter " + (perimetroCuadrados + perimetroTriangulos + perimetroCirculos).ToString("#.##") + " ");
+                        sb.Append("Area " + (areaCuadrados + areaCirculos + areaTriangulos).ToString("#.##"));
+                        break;
+                }
+
             }
 
             return sb.ToString();
@@ -221,7 +270,7 @@ namespace CodingChallenge.Data.Classes
                     case Castellano: return $"{cantidad} {TraducirForma(tipo, cantidad, idioma)} | Área {area:#.##} | Perímetro {perimetro:#.##} <br/>";//ESPAÑOL
                     case Portugues: return $"{cantidad} {TraducirForma(tipo, cantidad, idioma)} | Área {area:#.##} | Perímetro {perimetro:#.##} <br/>";//PORTUGUES
                     case Frances: return $"{cantidad} {TraducirForma(tipo, cantidad, idioma)} | Région {area:#.##} | Périmètre {perimetro:#.##} <br/>";//FRANCES
-                    case Italiano: return $"{cantidad} {TraducirForma(tipo, cantidad, idioma)} | La zona {area:#.##} | Perimetro {perimetro:#.##} <br/>";//ITALIANO
+                    case Italiano: return $"{cantidad} {TraducirForma(tipo, cantidad, idioma)} | Area {area:#.##} | Perimetro {perimetro:#.##} <br/>";//ITALIANO
                     default: return $"{cantidad} {TraducirForma(tipo, cantidad, idioma)} | Area {area:#.##} | Perimeter {perimetro:#.##} <br/>";//INGLES DEFAULT
                 }
             }
@@ -257,53 +306,53 @@ namespace CodingChallenge.Data.Classes
                 case Castellano:
                     switch (tipo)
                     {
-                        case Cuadrado: return cantidad == 1 ? "Cuadrado" : "Cuadrados";                            
-                        case Circulo: return cantidad == 1 ? "Triangulo" : "Triangulos";                            
-                        case TrianguloEquilatero: return cantidad == 1 ? "Círculo" : "Círculos";                            
-                        case Trapecio: return cantidad == 1 ? "Trapecio" : "Trapecios";                            
+                        case Cuadrado: return cantidad == 1 ? "Cuadrado" : "Cuadrados";
+                        case Circulo: return cantidad == 1 ? "Triangulo" : "Triangulos";
+                        case TrianguloEquilatero: return cantidad == 1 ? "Círculo" : "Círculos";
+                        case Trapecio: return cantidad == 1 ? "Trapecio" : "Trapecios";
                     }
-                    break;                    
+                    break;
 
                 case Portugues:
                     switch (tipo)
                     {
-                        case Cuadrado: return cantidad == 1 ? "Quadrado" : "Quadrados";                            
-                        case Circulo: return cantidad == 1 ? "Triângulo" : "Triângulos";                            
-                        case TrianguloEquilatero: return cantidad == 1 ? "Círculo" : "Círculos";                            
+                        case Cuadrado: return cantidad == 1 ? "Quadrado" : "Quadrados";
+                        case Circulo: return cantidad == 1 ? "Triângulo" : "Triângulos";
+                        case TrianguloEquilatero: return cantidad == 1 ? "Círculo" : "Círculos";
                         case Trapecio: return cantidad == 1 ? "Trapézio" : "Trapézios";
-                            
+
                     }
-                    break;                    
+                    break;
 
                 case Frances:
                     switch (tipo)
                     {
                         case Cuadrado: return cantidad == 1 ? "Carré" : "Carrés";
-                        case Circulo: return cantidad == 1 ? "Triangle" : "Triangles";                            
-                        case TrianguloEquilatero: return cantidad == 1 ? "Cercle" : "Cercles";                            
+                        case Circulo: return cantidad == 1 ? "Triangle" : "Triangles";
+                        case TrianguloEquilatero: return cantidad == 1 ? "Cercle" : "Cercles";
                         case Trapecio: return cantidad == 1 ? "Trapèze" : "Trapèzes";
-                            
+
                     }
-                    break;                    
+                    break;
 
                 case Italiano:
                     switch (tipo)
                     {
-                        case Cuadrado: return cantidad == 1 ? "Piazza" : "Piazze";                            
+                        case Cuadrado: return cantidad == 1 ? "Piazza" : "Piazze";
                         case Circulo: return cantidad == 1 ? "Triangolo" : "Triangli";
                         case TrianguloEquilatero: return cantidad == 1 ? "Cerchio" : "Cerchi";
-                        case Trapecio: return cantidad == 1 ? "Trapezio" : "Trapezi";                            
+                        case Trapecio: return cantidad == 1 ? "Trapezio" : "Trapezi";
                     }
-                    break;                    
+                    break;
 
                 default://INGLES
                     switch (tipo)
                     {
-                        case Cuadrado: return cantidad == 1 ? "Square" : "Squares";                            
-                        case Circulo: return cantidad == 1 ? "Triangle" : "Triangles";                            
-                        case TrianguloEquilatero: return cantidad == 1 ? "Circle" : "Circles";                            
-                        case Trapecio: return cantidad == 1 ? "Trapeze" : "Trapezoids";                            
-                    }                    
+                        case Cuadrado: return cantidad == 1 ? "Square" : "Squares";
+                        case Circulo: return cantidad == 1 ? "Triangle" : "Triangles";
+                        case TrianguloEquilatero: return cantidad == 1 ? "Circle" : "Circles";
+                        case Trapecio: return cantidad == 1 ? "Trapeze" : "Trapezoids";
+                    }
                     break;
             }
 
@@ -317,7 +366,7 @@ namespace CodingChallenge.Data.Classes
                 case Cuadrado: return _lado * _lado;
                 case Circulo: return (decimal)Math.PI * (_lado / 2) * (_lado / 2);
                 case TrianguloEquilatero: return ((decimal)Math.Sqrt(3) / 4) * _lado * _lado;
-                case Trapecio: return _altura * ((_lado + _base)/2);// area trapecio rectangulo
+                case Trapecio: return _altura * ((_lado + _base) / 2);// area trapecio rectangulo
                 default:
                     throw new ArgumentOutOfRangeException(@"Forma desconocida");
             }
@@ -336,9 +385,22 @@ namespace CodingChallenge.Data.Classes
             }
         }
 
-        /* CalcularCateto: obtiene la longitud del cateto faltante en un triangulo rectangulo */
+        //
+        // Resumen:
+        //     Devuelve la medida del cateto faltante en un triángulo rectángulo.
+        //
+        // Parámetros:
+        //   a:
+        //     Número que representa la medida de uno de los catetos.
+        //   b:
+        //     Número que representa la medida del otro cateto conocido.
+        //
+        // Devuelve:
+        //     La medida del cateto faltante en el tríangulo rectángulo como decimal.
+        //
+        // Nota: este método se podría implementar en una hipotética clase hija "TranguloRectangulo" que herede de "FiguraGenerica"
         public decimal CalcularCateto(decimal a, decimal b)
-        {            
+        {
             return (decimal)Math.Sqrt((double)((a * a) + (b * b)));
         }
     }
