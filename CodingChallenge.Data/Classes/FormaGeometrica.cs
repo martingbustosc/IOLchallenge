@@ -28,7 +28,7 @@ namespace CodingChallenge.Data.Classes
             que acepte los casos posibles para este ejercicio.
 
          Respecto al idioma: decidí agregar tres idiomas extras, Portugues, Frances e Italiano. Implementar switch en lugar de multiples if ya que las posibilidades son mayores,
-         y es más óptimo que ir comparando por cada uno. Para cada case del switch de idoma, su traducción, dejando por default a Inglés.
+         y es más óptimo que ir comparando por cada uno. Para cada case del switch de idioma, su traducción, dejando por default a Inglés.
          */
 
         public const int Cuadrado = 1;
